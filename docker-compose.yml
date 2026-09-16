@@ -2,19 +2,28 @@ services:
   backend:
     build:
       context: ./backend
+
     container_name: simple-erp-backend
+
     ports:
       - "8000:8000"
+
     env_file:
-      - ./backend/.env
+      - path: ./backend/.env
+        required: false
 
   frontend:
     build:
       context: ./frontend
+
     container_name: simple-erp-frontend
+
     ports:
       - "5173:5173"
+
     env_file:
-      - ./frontend/.env
+      - path: ./frontend/.env
+        required: false
+
     depends_on:
       - backend
