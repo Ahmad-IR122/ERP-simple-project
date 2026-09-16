@@ -38,4 +38,4 @@ jobs:
 
       - name: Tests
         working-directory: backend
-        run: pytest
+        run: python -m pytest
