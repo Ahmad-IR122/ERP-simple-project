@@ -2,11 +2,14 @@ from fastapi import FastAPI
 from sqlalchemy import text
 
 from app.core.database import engine
+from app.modules.products import router as products_router
 
 app = FastAPI(
     title="Simple ERP API",
     version="1.0.0",
 )
+
+app.include_router(products_router)
 
 
 @app.get("/health")
