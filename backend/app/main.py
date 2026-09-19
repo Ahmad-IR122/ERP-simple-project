@@ -3,6 +3,7 @@ from sqlalchemy import text
 
 from app.core.database import engine
 from app.modules.products import router as products_router
+from app.modules.users import router as users_router
 
 app = FastAPI(
     title="Simple ERP API",
@@ -10,6 +11,7 @@ app = FastAPI(
 )
 
 app.include_router(products_router)
+app.include_router(users_router)
 
 
 @app.get("/health")
