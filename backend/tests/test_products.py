@@ -1,10 +1,9 @@
+from app.core.database import Base, get_db
+from app.main import app
 from fastapi.testclient import TestClient
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.pool import StaticPool
-
-from app.core.database import Base, get_db
-from app.main import app
 
 engine = create_engine(
     "sqlite://",
@@ -28,6 +27,7 @@ client = TestClient(app)
 
 
 def setup_function():
+    app.dependency_overrides[get_db] = override_get_db
     Base.metadata.drop_all(engine)
     Base.metadata.create_all(engine)
 
