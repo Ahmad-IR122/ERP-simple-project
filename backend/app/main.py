@@ -1,9 +1,11 @@
-from fastapi import FastAPI
+from fastapi import Depends,FastAPI
 from sqlalchemy import text
 
 from app.core.database import engine
 from app.modules.products import router as products_router
 from app.modules.users import router as users_router
+from app.core.auth import get_current_user
+from app.modules.users.models import User
 
 app = FastAPI(
     title="Simple ERP API",
@@ -26,4 +28,15 @@ def database_health_check():
     return {
         "status": "ok",
         "database": "connected",
+    }
+    
+@app.get("/me")
+def get_me(
+  current_user: User = Depends(get_current_user)
+):
+  return {
+        "id": current_user.id,
+        "clerk_user_id": current_user.clerk_user_id,
+        "email": current_user.email,
+        "role": current_user.role,
     }
