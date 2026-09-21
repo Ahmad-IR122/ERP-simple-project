@@ -1,3 +1,5 @@
+from typing import Annotated
+
 import jwt
 from fastapi import Depends, HTTPException, status
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
@@ -43,14 +45,14 @@ def verify_clerk_token(token: str) -> dict:
 
 
 def get_current_clerk_user(
-    credentials: HTTPAuthorizationCredentials = Depends(security),
+    credentials: Annotated[HTTPAuthorizationCredentials, Depends(security)],
 ) -> dict:
     return verify_clerk_token(credentials.credentials)
 
 
 def get_current_user(
-    clerk_user: dict = Depends(get_current_clerk_user),
-    db: Session = Depends(get_db),
+    clerk_user: Annotated[dict, Depends(get_current_clerk_user)],
+    db: Annotated[Session, Depends(get_db)],
 ) -> User:
     clerk_user_id = clerk_user.get("sub")
 

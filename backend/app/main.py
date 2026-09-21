@@ -1,10 +1,12 @@
-from fastapi import Depends,FastAPI
+from typing import Annotated
+
+from fastapi import Depends, FastAPI
 from sqlalchemy import text
 
+from app.core.auth import get_current_user
 from app.core.database import engine
 from app.modules.products import router as products_router
 from app.modules.users import router as users_router
-from app.core.auth import get_current_user
 from app.modules.users.models import User
 
 app = FastAPI(
@@ -32,9 +34,9 @@ def database_health_check():
     
 @app.get("/me")
 def get_me(
-  current_user: User = Depends(get_current_user)
+    current_user: Annotated[User, Depends(get_current_user)],
 ):
-  return {
+    return {
         "id": current_user.id,
         "clerk_user_id": current_user.clerk_user_id,
         "email": current_user.email,
