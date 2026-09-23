@@ -1,4 +1,5 @@
 import json
+from typing import Annotated
 
 from fastapi import APIRouter, Depends, HTTPException, Request, status
 from sqlalchemy.orm import Session
@@ -7,7 +8,6 @@ from svix.webhooks import Webhook, WebhookVerificationError
 from app.core.config import settings
 from app.core.database import get_db
 from app.modules.users.models import User
-
 
 router = APIRouter(
     prefix="/webhooks",
@@ -18,7 +18,7 @@ router = APIRouter(
 @router.post("/clerk")
 async def clerk_webhook(
     request: Request,
-    db: Session = Depends(get_db),
+    db: Annotated[Session, Depends(get_db)],
 ):
     payload = await request.body()
 

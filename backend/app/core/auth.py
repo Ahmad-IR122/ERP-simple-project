@@ -10,7 +10,6 @@ from app.core.config import settings
 from app.core.database import get_db
 from app.modules.users.models import User
 
-
 security = HTTPBearer()
 
 jwk_client = PyJWKClient(settings.CLERK_JWKS_URL)
