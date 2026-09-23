@@ -19,6 +19,9 @@ jobs:
 
     env:
       DATABASE_URL: ${{ secrets.DATABASE_URL }}
+      CLERK_ISSUER_URL: ${{ secrets.CLERK_ISSUER_URL }}
+      CLERK_JWKS_URL: ${{ secrets.CLERK_JWKS_URL }}
+      CLERK_WEBHOOK_SECRET: ${{ secrets.CLERK_WEBHOOK_SECRET }}
 
     steps:
       - name: Checkout
