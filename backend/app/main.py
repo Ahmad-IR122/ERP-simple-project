@@ -6,6 +6,7 @@ from sqlalchemy import text
 
 from app.core.auth import get_current_user
 from app.core.database import engine
+from app.core.permissions import require_role
 from app.modules.products import router as products_router
 from app.modules.users import router as users_router
 from app.modules.users.models import User
@@ -53,6 +54,26 @@ def get_me(
     return {
         "id": current_user.id,
         "clerk_user_id": current_user.clerk_user_id,
+        "email": current_user.email,
+        "role": current_user.role,
+    }
+
+@app.get("/admin-test")
+def admin_test(
+    current_user: Annotated[User, Depends(require_role("admin"))],
+):
+    return {
+        "message": "Admin access granted",
+        "email": current_user.email,
+        "role": current_user.role,
+    }
+    
+@app.get("/employee-test")
+def employee_test(
+    current_user: Annotated[User, Depends(require_role("employee"))],
+):
+    return {
+        "message": "Employee access granted",
         "email": current_user.email,
         "role": current_user.role,
     }
