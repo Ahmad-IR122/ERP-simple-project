@@ -6,11 +6,11 @@ from sqlalchemy import text
 
 from app.core.auth import get_current_user
 from app.core.database import engine
+from app.core.permissions import require_role
 from app.modules.products import router as products_router
 from app.modules.users import router as users_router
 from app.modules.users.models import User
 from app.webhooks.clerk import router as clerk_webhook_router
-from app.core.permissions import require_role
 
 app = FastAPI(
     title="Simple ERP API",
@@ -60,7 +60,7 @@ def get_me(
 
 @app.get("/admin-test")
 def admin_test(
-    current_user: User = Depends(require_role("admin")),
+    current_user: Annotated[User, Depends(require_role("admin"))],
 ):
     return {
         "message": "Admin access granted",
@@ -70,7 +70,7 @@ def admin_test(
     
 @app.get("/employee-test")
 def employee_test(
-    current_user: User = Depends(require_role("employee")),
+    current_user: Annotated[User, Depends(require_role("employee"))],
 ):
     return {
         "message": "Employee access granted",
